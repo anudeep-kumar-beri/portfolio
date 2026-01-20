@@ -28,41 +28,14 @@ import {
   Search
 } from 'lucide-react';
 
-// --- ANIMATION WRAPPER ---
-const Reveal = ({ children, width = "w-full", delay = 0, x = 0, y = 40 }) => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const hasTriggered = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !hasTriggered.current) {
-        setIsVisible(true);
-        hasTriggered.current = true;
-      }
-    }, { 
-      threshold: 0.2, 
-      rootMargin: "0px 0px -100px 0px" 
-    });
-
-    if (ref.current) observer.observe(ref.current);
-    return () => {
-      if(ref.current) observer.unobserve(ref.current);
-    };
-  }, []);
-
+// --- ANIMATION WRAPPER (DISABLED) ---
+// Reveal used to animate content on scroll via IntersectionObserver.
+// Scroll-triggering has been disabled — content now renders statically.
+const Reveal = ({ children, width = "w-full" }) => {
+  // Keep the API compatible but render children without any intersection logic
   return (
-    <div ref={ref} className={`relative ${width}`}>
-      <div
-        className={`transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isVisible ? "translate-y-0 translate-x-0 opacity-100" : ""
-        }`}
-        style={{ 
-          transitionDelay: `${delay}s`,
-          transform: isVisible ? 'none' : `translate(${x}px, ${y}px)`,
-          opacity: isVisible ? 1 : 0
-        }}
-      >
+    <div className={`relative ${width}`}>
+      <div style={{ transform: 'none', opacity: 1 }}>
         {children}
       </div>
     </div>
